@@ -21,7 +21,7 @@
 </nav>
 
 <main class="container">
-    <form class="row g-3" th:classappend="${#fields.hasErrors('osoba.*')} ? 'was-validated'" method="post">
+    <form class="row g-3" th:classappend="${#fields.hasErrors('osoba.*')} ? 'was-validated'" method="post" novalidate>
         <div class="col-md-6">
             <label for="jmeno" class="form-label">Jméno</label>
             <input type="text" class="form-control" th:field="${osoba.jmeno}" maxlength="100" required>

@@ -28,25 +28,37 @@ public class OsobaController {
     this.repository = repository;
   }
 
+  /**
+   * Nastavení „bindování“ vstupů od uživatele do Java objektů – prázdné řetězce se nastaví jako {@code null} hodnota.
+   */
   @InitBinder
   public void nullStringBinding(WebDataBinder binder) {
-    //prázdné textové řetězce nahradit null hodnotou
     binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
   }
 
+  /**
+   * Zobrazí seznam všech osob.
+   */
   @GetMapping("/")
   public Object seznam() {
-    //TODO načíst seznam osob
     return new ModelAndView("seznam")
             .addObject("osoby", repository.findAll());
   }
 
+  /**
+   * Zobrazí formulář pro zadání nové osoby.
+   */
   @GetMapping("/novy")
   public Object novy() {
     return new ModelAndView("detail")
             .addObject("osoba", new Osoba());
   }
 
+  /**
+   * Uloží novou osobu do databáze.
+   * <p>
+   * Pokud není splněna některá validace, znovu zobrazí formulář pro zadání osoby.
+   */
   @PostMapping("/novy")
   public Object pridat(@ModelAttribute("osoba") @Valid Osoba osoba, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
@@ -57,6 +69,11 @@ public class OsobaController {
     return "redirect:/";
   }
 
+  /**
+   * Zobrazí detail osoby.
+   *
+   * @param id Identifikátor osoby zadaný v URL. Identifikátor může obsahovat jen číslice (musí být alespoň jedna).
+   */
   @GetMapping("/{id:[0-9]+}")
   public Object detail(@PathVariable long id) {
     Optional<Osoba> osoba = repository.findById(id);
@@ -67,16 +84,27 @@ public class OsobaController {
             .addObject("osoba", osoba.get());
   }
 
+  /**
+   * Uloží změněné údaje o osobě do databáze (aktualizuje záznam).
+   *
+   * @param osoba         Údaje o osobě zadané uživatel plus identifikátor osoby převzatý z URL.
+   * @param bindingResult Výsledek validace.
+   */
   @PostMapping("/{id:[0-9]+}")
   public Object ulozit(@PathVariable long id, @ModelAttribute("osoba") @Valid Osoba osoba, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
       return "detail";
     }
-    osoba.setId(id);
     repository.save(osoba);
     return "redirect:/";
   }
 
+
+  /**
+   * Smaže údaje o osobě z databáze.
+   *
+   * @param id Identifikátor osoby zadaný v URL. Identifikátor může obsahovat jen číslice (musí být alespoň jedna).
+   */
   @PostMapping(value = "/{id:[0-9]+}", params = "akce=smazat")
   public Object smazat(@PathVariable long id) {
     repository.deleteById(id);

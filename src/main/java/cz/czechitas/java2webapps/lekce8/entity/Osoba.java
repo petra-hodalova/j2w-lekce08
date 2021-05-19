@@ -21,30 +21,58 @@ import java.time.LocalDate;
  */
 @Entity
 public class Osoba {
+  /**
+   * Identifikátor osoby.
+   *
+   * Jedná se o databázový identifikátor (anotace {@link @Id} a jeho hodnota je automaticky přiřazována databází (anotace @@link @{@link GeneratedValue}}
+   * s typem {@link GenerationType#IDENTITY}.
+   */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  /**
+   * Křestní jméno.
+   */
   @Length(max = 100)
   @NotBlank
   private String jmeno;
 
+  /**
+   * Příjmení.
+   */
   @Length(max = 100)
   @NotBlank
   private String prijmeni;
 
+  /**
+   * Datum narození.
+   *
+   * Datum narození musí být v minulosti nebo dnes.
+   */
   @PastOrPresent
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   private LocalDate datumNarozeni;
 
+  /**
+   * Adresa.
+   */
   @Length(max = 200)
   @NotBlank
   private String adresa;
 
+  /**
+   * E-mail – nepovinný údaj.
+   */
   @Length(max = 100)
   @Email
   private String email;
 
+  /**
+   * Telefon – nepovinný údaj.
+   *
+   * Pokud je uveden, musí mít délku 9–13 znaků, může začínat znakem „+“ a dále mohou být jen samé číslice.
+   */
   @Length(min = 9, max = 13)
   @Pattern(regexp = "\\+?\\d+")
   private String telefon;
