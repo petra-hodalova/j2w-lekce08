@@ -24,22 +24,22 @@
     <form class="row g-3" th:classappend="${#fields.hasErrors('osoba.*')} ? 'was-validated'" method="post" novalidate>
         <div class="col-md-6">
             <label for="jmeno" class="form-label">Jméno</label>
-            <input type="text" class="form-control" th:field="${osoba.jmeno}" maxlength="100" required>
+            <input type="text" class="form-control" th:field="${osoba.jmeno}" maxlength="100" th:errorclass="is-invalid" required>
             <div class="invalid-feedback" th:if="${#fields.hasErrors('osoba.jmeno')}" th:errors="${osoba.jmeno}">Jméno je povinný údaj.</div>
         </div>
         <div class="col-md-6">
             <label for="prijmeni" class="form-label">Příjmení</label>
-            <input type="text" class="form-control" th:field="${osoba.prijmeni}" maxlength="100" required>
+            <input type="text" class="form-control" th:field="${osoba.prijmeni}" maxlength="100" th:errorclass="is-invalid" required>
             <div class="invalid-feedback" th:if="${#fields.hasErrors('osoba.prijmeni')}" th:errors="${osoba.prijmeni}">Příjmení je povinný údaj.</div>
         </div>
         <div class="col-12">
             <label for="adresa" class="form-label">Adresa</label>
-            <input type="text" class="form-control" th:field="${osoba.adresa}" maxlength="200" required>
+            <input type="text" class="form-control" th:field="${osoba.adresa}" maxlength="200" th:errorclass="is-invalid" required>
             <div class="invalid-feedback" th:if="${#fields.hasErrors('osoba.adresa')}" th:errors="${osoba.adresa}">Adresa je povinný údaj.</div>
         </div>
         <div class="col-md-6">
             <label for="datumNarozeni" class="form-label">Datum narození</label>
-            <input type="date" class="form-control" th:field="${osoba.datumNarozeni}" required>
+            <input type="date" class="form-control" th:field="${osoba.datumNarozeni}" th:errorclass="is-invalid" required>
             <div class="invalid-feedback" th:if="${#fields.hasErrors('osoba.datumNarozeni')}" th:errors="${osoba.datumNarozeni}">Datum narození je povinný
                 údaj.
             </div>
@@ -52,12 +52,12 @@
         </div>
         <div class="col-md-6">
             <label for="email" class="form-label">E-mail</label>
-            <input type="email" class="form-control" th:field="${osoba.email}">
+            <input type="email" class="form-control" th:field="${osoba.email}" th:errorclass="is-invalid">
             <div class="invalid-feedback" th:if="${#fields.hasErrors('osoba.email')}" th:errors="${osoba.email}">Chybný formát e-mailu.</div>
         </div>
         <div class="col-md-6">
             <label for="telefon" class="form-label">Telefon</label>
-            <input type="tel" class="form-control" th:field="${osoba.telefon}" minlength="9" maxlength="13">
+            <input type="tel" class="form-control" th:field="${osoba.telefon}" minlength="9" maxlength="13" th:errorclass="is-invalid">
             <div class="invalid-feedback" th:if="${#fields.hasErrors('osoba.telefon')}" th:errors="${osoba.telefon}">Chybný formát telefonního čísla.</div>
         </div>
         <div class="col-12 d-flex justify-content-end">
