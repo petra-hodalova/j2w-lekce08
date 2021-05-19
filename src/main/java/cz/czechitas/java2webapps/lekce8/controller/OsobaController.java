@@ -78,7 +78,7 @@ public class OsobaController {
   public Object detail(@PathVariable long id) {
     Optional<Osoba> osoba = repository.findById(id);
     if (osoba.isEmpty()) {
-      return ResponseEntity.notFound();
+      return ResponseEntity.notFound().build();
     }
     return new ModelAndView("detail")
             .addObject("osoba", osoba.get());
