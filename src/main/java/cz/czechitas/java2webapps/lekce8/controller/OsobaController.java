@@ -1,5 +1,6 @@
 package cz.czechitas.java2webapps.lekce8.controller;
 
+import cz.czechitas.java2webapps.lekce8.repository.OsobaRepository;
 import cz.czechitas.java2webapps.lekce8.entity.Osoba;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
@@ -13,17 +14,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.util.List;
 
 @Controller
 public class OsobaController {
 
-  private final List<Osoba> seznamOsob = List.of(
-          new Osoba(1L, "Božena", "Němcová", LocalDate.of(1820, 2, 4), "Vídeň", null, null)
-  );
+  private final OsobaRepository osobaRepository;
 
-  @InitBinder
+  public OsobaController(OsobaRepository osobaRepository) {
+    this.osobaRepository = osobaRepository;
+  }
+
+   @InitBinder
   public void nullStringBinding(WebDataBinder binder) {
     //prázdné textové řetězce nahradit null hodnotou
     binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
@@ -33,7 +34,7 @@ public class OsobaController {
   public Object seznam() {
     //TODO načíst seznam osob
     return new ModelAndView("seznam")
-            .addObject("osoby", seznamOsob);
+            .addObject("osoby", osobaRepository.findAll());
   }
 
   @GetMapping("/novy")
@@ -48,6 +49,7 @@ public class OsobaController {
       return "detail";
     }
     //TODO uložit údaj o nové osobě
+    osobaRepository.save(osoba);
     return "redirect:/";
   }
 
@@ -55,7 +57,7 @@ public class OsobaController {
   public Object detail(@PathVariable long id) {
     //TODO načíst údaj o osobě
     return new ModelAndView("detail")
-            .addObject("osoba", seznamOsob.get(0));
+            .addObject("osoba", osobaRepository.findById(id).get());
   }
 
   @PostMapping("/{id:[0-9]+}")
@@ -64,12 +66,14 @@ public class OsobaController {
       return "detail";
     }
     //TODO uložit údaj o osobě
+    osobaRepository.save(osoba);
     return "redirect:/";
   }
 
   @PostMapping(value = "/{id:[0-9]+}", params = "akce=smazat")
   public Object smazat(@PathVariable long id) {
     //TODO smazat údaj o osobě
+    osobaRepository.deleteById(id);
     return "redirect:/";
   }
 
